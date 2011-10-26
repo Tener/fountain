@@ -33,7 +33,7 @@ data Droplet a = Droplet IntSet a deriving (Show, Eq)
 type Precoding = [IntSet]
 
 -- | Generates a random precoding matrix.
--- > precoding seed messageLength extraSymbols (minDegree, maxDegree)
+--   precoding seed messageLength extraSymbols (minDegree, maxDegree)
 precoding :: Int -> Int -> Int -> (Int, Int) -> Precoding
 precoding seed messageLength extraSymbols (minDegree, maxDegree) = f 0 $ mkStdGen seed
   where
@@ -94,7 +94,6 @@ refineDroplets d@(Droplet indices symbol) droplets = foldl f ([], [d]) droplets
   --f :: Bits a => ([Droplet a], [Droplet a]) -> Droplet a -> ([Droplet a], [Droplet a])
   f (new, old) d@(Droplet indices1 symbol1)
     | S.isSubsetOf indices indices1 = (Droplet (S.difference indices1 indices) symbol2 : new, old)
-    -- | S.isSubsetOf indices1 indices = (Droplet (S.difference indices indices1) symbol2 : new, d : old)
     | otherwise = (new, d : old)
     where
     symbol2 = symbol `xor` symbol1
@@ -122,7 +121,7 @@ test messageLength maxDegree precoding seed = f 1 (decoder messageLength precodi
     (decoder', Just m)  -> (i, m == message, decoders ++ [decoder, decoder'])
 
 -- | Runs a test with a randomly generated precoding.
--- > test' messageLength dropletMaxDegree extraSymbols (precodingMinDegree, precodingMaxDegree) seed
+--   test' messageLength dropletMaxDegree extraSymbols (precodingMinDegree, precodingMaxDegree) seed
 test' messageLength maxDegree extraSymbols minMaxDegree seed =
   test messageLength maxDegree (precoding (seed + 1) messageLength extraSymbols minMaxDegree) seed
 
