@@ -12,6 +12,7 @@ module Codec.Fountain
   , test
   , test'
   , decoderProgress
+  , Precoding
   ) where
 
 import Data.Bits
